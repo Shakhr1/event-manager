@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/locations")
 public class LocationController {
 
-    private final static Logger log = LoggerFactory.getLogger(LocationController.class);
+    private static final Logger log = LoggerFactory.getLogger(LocationController.class);
 
     private final LocationDtoMapper locationDtoMapper;
     private final LocationService locationService;

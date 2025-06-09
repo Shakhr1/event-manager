@@ -12,10 +12,11 @@ import java.util.List;
 public class LocationService {
     private final LocationEntityMapper entityMapper;
     private final LocationRepository locationRepository;
+    private final static String LOCATION_NOT_FOUND = "Location entity wasn't found id=";
 
     public LocationService(LocationEntityMapper entityMapper, LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
-        this.entityMapper = new LocationEntityMapper();
+        this.entityMapper = entityMapper;
     }
 
     public Location createLocation(Location locationToCreate) {
@@ -28,8 +29,7 @@ public class LocationService {
 
     public void deleteLocation(Long id) {
         var entityToDelete = locationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Location entity wasn't found id=%s"
-                        .formatted(id)));
+                .orElseThrow(() -> new EntityNotFoundException(LOCATION_NOT_FOUND + id));
         locationRepository.deleteById(id);
         entityMapper.toDomain(entityToDelete);
     }
@@ -40,8 +40,7 @@ public class LocationService {
         }
 
         var entityToUpdate = locationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Location entity wasn't found id=%s"
-                        .formatted(id)));
+                .orElseThrow(() -> new EntityNotFoundException(LOCATION_NOT_FOUND + id));
         entityToUpdate.setAddress(locationToUpdate.address());
         entityToUpdate.setName(locationToUpdate.name());
         entityToUpdate.setCapacity(locationToUpdate.capacity());
@@ -54,8 +53,7 @@ public class LocationService {
 
     public Location getLocationById(Long id) {
         var foundEntity = locationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Location entity wasn't found id=%s"
-                        .formatted(id)));
+                .orElseThrow(() -> new EntityNotFoundException(LOCATION_NOT_FOUND + id));
         return entityMapper.toDomain(foundEntity);
     }
 

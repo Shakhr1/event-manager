@@ -12,7 +12,6 @@ public class LocationEntity {
     private Long id;
 
     @Column(name = "name")
-
     private String name;
 
     @Column(name = "address")
@@ -43,10 +42,6 @@ public class LocationEntity {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
