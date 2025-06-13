@@ -3,7 +3,6 @@ package school.sorokin.eventmanager.mapper;
 import org.springframework.stereotype.Component;
 import school.sorokin.eventmanager.entity.UserEntity;
 import school.sorokin.eventmanager.model.User;
-import school.sorokin.eventmanager.model.UserRole;
 
 @Component
 public class UserEntityMapper {
@@ -13,7 +12,7 @@ public class UserEntityMapper {
                 user.login(),
                 user.passwordHash(),
                 user.age(),
-                user.role().name()
+                user.role()
         );
     }
 
@@ -23,7 +22,7 @@ public class UserEntityMapper {
                 entity.getLogin(),
                 entity.getPasswordHash(),
                 entity.getAge(),
-                UserRole.valueOf(entity.getRole())
+                entity.getRole()
         );
     }
 }

@@ -1,18 +1,19 @@
 package school.sorokin.eventmanager.mapper;
 
 import org.springframework.stereotype.Component;
+import school.sorokin.eventmanager.dto.SignUpRequest;
 import school.sorokin.eventmanager.dto.UserDto;
 import school.sorokin.eventmanager.model.User;
 
 @Component
 public class UserDtoMapper {
-    public User toDomain(UserDto userDto) {
+    public User toDomain(SignUpRequest signUpRequest) {
         return new User(
-                userDto.id(),
-                userDto.login(),
-                userDto.passwordHash(),
-                userDto.age(),
-                userDto.role()
+                null,
+                signUpRequest.login(),
+                signUpRequest.password(),
+                signUpRequest.age(),
+                null
         );
     }
 

@@ -1,6 +1,7 @@
 package school.sorokin.eventmanager.entity;
 
 import jakarta.persistence.*;
+import school.sorokin.eventmanager.model.UserRole;
 
 @Entity
 @Table(name = "users")
@@ -21,17 +22,18 @@ public class UserEntity {
     private Integer age;
 
     @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
-    public UserEntity() {
-    }
-
-    public UserEntity(Long id, String login, String passwordHash, Integer age, String role) {
+    public UserEntity(Long id, String login, String passwordHash, Integer age, UserRole role) {
         this.id = id;
         this.login = login;
         this.passwordHash = passwordHash;
         this.age = age;
         this.role = role;
+    }
+
+    public UserEntity() {
     }
 
     public void setId(Long id) {
@@ -66,11 +68,11 @@ public class UserEntity {
         this.age = age;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 }
