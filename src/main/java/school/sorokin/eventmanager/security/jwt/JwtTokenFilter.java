@@ -58,12 +58,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 null,
                 List.of(new SimpleGrantedAuthority(role))
         );
-        addSecurityContextHolder(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
-    }
-
-    private void addSecurityContextHolder(UsernamePasswordAuthenticationToken token) {
-        LOGGER.info("Execute method addSecurityContextHolder");
-        SecurityContextHolder.getContext().setAuthentication(token);
     }
 }
