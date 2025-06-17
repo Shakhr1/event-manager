@@ -1,5 +1,6 @@
 package school.sorokin.eventmanager.service;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,19 +11,12 @@ import school.sorokin.eventmanager.model.User;
 import school.sorokin.eventmanager.repository.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
-
-    public UserService(
-            UserRepository userRepository,
-            UserEntityMapper userEntityMapper
-    ) {
-        this.userRepository = userRepository;
-        this.userEntityMapper = userEntityMapper;
-    }
 
     public User save(User userToSave) {
         LOGGER.info("Execute method save user: login = {} in UserService class", userToSave.login());

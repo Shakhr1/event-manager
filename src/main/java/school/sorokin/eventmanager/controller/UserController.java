@@ -1,5 +1,6 @@
 package school.sorokin.eventmanager.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import school.sorokin.eventmanager.service.UserService;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -24,18 +26,6 @@ public class UserController {
     private final UserDtoMapper userDtoMapper;
     private final UserRegistrationService userRegistrationService;
     private final UserService userService;
-
-    public UserController(
-            AuthenticationService authenticationService,
-            UserDtoMapper userDtoMapper,
-            UserRegistrationService userRegistrationService,
-            UserService userService
-    ) {
-        this.authenticationService = authenticationService;
-        this.userDtoMapper = userDtoMapper;
-        this.userRegistrationService = userRegistrationService;
-        this.userService = userService;
-    }
 
     @PostMapping
     public ResponseEntity<UserDto> register(@Validated @RequestBody SignUpRequest signUpRequest) {

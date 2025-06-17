@@ -1,9 +1,17 @@
 package school.sorokin.eventmanager.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "locations")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class LocationEntity {
 
     @Id
@@ -22,57 +30,4 @@ public class LocationEntity {
 
     @Column(name = "description")
     private String description;
-
-    public LocationEntity(
-            Long id,
-            String name,
-            String address,
-            Long capacity,
-            String description
-    ) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.capacity = capacity;
-        this.description = description;
-    }
-
-    public LocationEntity() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Long getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Long capacity) {
-        this.capacity = capacity;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
