@@ -12,9 +12,9 @@ import school.sorokin.eventmanager.dto.SignUpRequest;
 import school.sorokin.eventmanager.dto.UserDto;
 import school.sorokin.eventmanager.mapper.UserDtoMapper;
 import school.sorokin.eventmanager.security.jwt.JwtResponse;
-import school.sorokin.eventmanager.service.AuthenticationService;
-import school.sorokin.eventmanager.service.UserRegistrationService;
-import school.sorokin.eventmanager.service.UserService;
+import school.sorokin.eventmanager.service.auth.AuthenticationService;
+import school.sorokin.eventmanager.service.user.UserRegistrationService;
+import school.sorokin.eventmanager.service.user.UserService;
 
 @RestController
 @RequestMapping("/users")

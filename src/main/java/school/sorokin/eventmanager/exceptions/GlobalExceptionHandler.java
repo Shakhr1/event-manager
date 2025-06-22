@@ -1,8 +1,8 @@
 package school.sorokin.eventmanager.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    private final static Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = {IllegalArgumentException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorMessage> handleIllegalArgumentException(Exception exception) {
@@ -76,5 +76,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(messageResponse);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorMessage> handleValidateException(ConstraintViolationException e) {
+        log.error("Handle Bad request exception: ConstraintViolationException = {}", e.getConstraintViolations());
+        String detailMessage = e.getConstraintViolations()
+                .stream()
+                .map(error -> String.format("%s %s %s Rejected value: %s",
+                        error.getRootBeanClass().getSimpleName(), error.getPropertyPath(),
+                        error.getMessage(), error.getInvalidValue())
+                ).collect(Collectors.joining(", "));
+
+        var error = new ErrorMessage(
+                "Bad request. Argument is NULL",
+                detailMessage,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
     }
 }

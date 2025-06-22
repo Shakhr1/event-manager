@@ -1,4 +1,4 @@
-package school.sorokin.eventmanager.service;
+package school.sorokin.eventmanager.service.location;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

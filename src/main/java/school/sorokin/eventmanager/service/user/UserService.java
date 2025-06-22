@@ -1,4 +1,4 @@
-package school.sorokin.eventmanager.service;
+package school.sorokin.eventmanager.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

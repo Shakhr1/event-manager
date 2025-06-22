@@ -1,4 +1,4 @@
-package school.sorokin.eventmanager.service;
+package school.sorokin.eventmanager.service.user;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

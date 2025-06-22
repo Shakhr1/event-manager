@@ -31,6 +31,18 @@ public class JwtTokenManager {
         this.expirationTime = expirationTime;
     }
 
+    public boolean isTokenValid(String jwtToken) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parse(jwtToken);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     public String generateJwtToken(User user) {
         LOGGER.info("Generate jwt token for login = {}", user.login());
         Map<String, Object> claims = new HashMap<>();
