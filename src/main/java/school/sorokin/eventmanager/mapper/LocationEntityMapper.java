@@ -6,7 +6,6 @@ import school.sorokin.eventmanager.entity.LocationEntity;
 import school.sorokin.eventmanager.model.Location;
 
 @Mapper(componentModel = "spring")
-@Primary
 public interface LocationEntityMapper {
     Location toDomain(LocationEntity locationEntity);
 

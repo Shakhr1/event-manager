@@ -1,8 +1,8 @@
 package school.sorokin.eventmanager.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,17 +19,17 @@ import school.sorokin.eventmanager.service.user.UserService;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private final AuthenticationService authenticationService;
     private final UserDtoMapper userDtoMapper;
     private final UserRegistrationService userRegistrationService;
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> register(@Validated @RequestBody SignUpRequest signUpRequest) {
-        LOGGER.info("Post request for SignUp: login = {}", signUpRequest.login());
+    public ResponseEntity<UserDto> register(@Valid @RequestBody SignUpRequest signUpRequest) {
+        log.info("Post request for SignUp: login = {}", signUpRequest.login());
         return ResponseEntity.
                 status(HttpStatus.CREATED)
                 .body(userDtoMapper.toDto(userRegistrationService.register(userDtoMapper.toDomain(signUpRequest))));
@@ -44,7 +44,7 @@ public class UserController {
 
     @PostMapping("/auth")
     public ResponseEntity<JwtResponse> authentication(@Validated @RequestBody SignInRequest signInRequest) {
-        LOGGER.info("Post request for SignIn: login = {}", signInRequest.login());
+        log.info("Post request for SignIn: login = {}", signInRequest.login());
         return ResponseEntity.ok().body(new JwtResponse(authenticationService.authenticateUser(signInRequest)));
     }
 }
