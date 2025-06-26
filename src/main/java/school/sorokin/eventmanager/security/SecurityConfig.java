@@ -67,33 +67,37 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .formLogin(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session
+                .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
-                    authorizationManagerRequestMatcherRegistry
-                            .requestMatchers(HttpMethod.GET, "/locations/**")
-                            .hasAnyAuthority("ADMIN", "USER")
-                            .requestMatchers(HttpMethod.POST, "/locations")
-                            .hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, "/locations/**")
-                            .hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.PUT, "/locations/**")
-                            .hasAuthority("ADMIN")
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
+                .authorizeHttpRequests(authorizeHttpRequest ->
+                        authorizeHttpRequest
+                                .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/users/auth").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/users/{userId}").hasAuthority("ADMIN")
 
-                            .requestMatchers(HttpMethod.POST, "/users")
-                            .permitAll()
-                            .requestMatchers(HttpMethod.GET, "/users/**")
-                            .hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.POST, "/users/auth")
-                            .permitAll()
-                            .anyRequest()
-                            .authenticated();
-                })
-                .exceptionHandling(exception -> {
-                    exception.authenticationEntryPoint(authenticationEntryPoint);
-                    exception.accessDeniedHandler(customAccessDeniedHandler);
-                })
+                                .requestMatchers(HttpMethod.POST, "/locations").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/locations/{locationId}").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/locations/{locationId}").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/locations/**").hasAnyAuthority("ADMIN", "USER")
+
+                                .requestMatchers(HttpMethod.POST, "/events").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/events/{locationId}").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.PUT, "/events/{locationId}").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.GET, "/events/**").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.POST, "/events/search").hasAnyAuthority("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.GET, "/events/my").hasAuthority("USER")
+
+                                .requestMatchers(HttpMethod.POST, "/events/registrations/").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/events/registrations/cancel/").hasAuthority("USER")
+                                .requestMatchers(HttpMethod.GET, "/events/registrations/my").hasAuthority("USER")
+
+                                .anyRequest().authenticated())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

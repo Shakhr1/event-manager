@@ -1,6 +1,7 @@
-package school.sorokin.eventmanager.service;
+package school.sorokin.eventmanager.service.location;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.sorokin.eventmanager.mapper.LocationEntityMapper;
 import school.sorokin.eventmanager.model.Location;
@@ -9,15 +10,11 @@ import school.sorokin.eventmanager.repository.LocationRepository;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class LocationService {
     private final LocationEntityMapper entityMapper;
     private final LocationRepository locationRepository;
     private final static String LOCATION_NOT_FOUND = "Location entity wasn't found id=";
-
-    public LocationService(LocationEntityMapper entityMapper, LocationRepository locationRepository) {
-        this.locationRepository = locationRepository;
-        this.entityMapper = entityMapper;
-    }
 
     public Location createLocation(Location locationToCreate) {
         if (locationToCreate.id() != null) {
