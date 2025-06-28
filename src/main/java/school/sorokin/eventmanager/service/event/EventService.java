@@ -12,6 +12,8 @@ import school.sorokin.eventmanager.mapper.EventEntityMapper;
 import school.sorokin.eventmanager.model.Event;
 import school.sorokin.eventmanager.model.EventStatus;
 import school.sorokin.eventmanager.model.UserRole;
+import school.sorokin.eventmanager.model.kafka.KafkaChecker;
+import school.sorokin.eventmanager.repository.EventRegistrationRepository;
 import school.sorokin.eventmanager.repository.EventRepository;
 import school.sorokin.eventmanager.service.auth.AuthenticationService;
 import school.sorokin.eventmanager.service.location.LocationService;
@@ -28,9 +30,11 @@ public class EventService {
     private final EventEntityMapper eventEntityMapper;
     private final LocationService locationService;
     private final AuthenticationService authenticationService;
+    private final KafkaChecker kafkaChecker;
+    private final EventRegistrationRepository eventRegistrationRepository;
+    private final PermissionService permissionService;
 
     public Event createEvent(EventCreateRequestDto createRequestDto) {
-
         var location = locationService.getLocationById(createRequestDto.locationId());
         if (location.capacity() < createRequestDto.maxPlaces()) {
             throw new IllegalArgumentException("Capacity of location is: %s, but maxPlaces is: %s"
@@ -75,9 +79,17 @@ public class EventService {
         Optional.ofNullable(updateRequest.duration()).ifPresent(event::setDuration);
         Optional.ofNullable(updateRequest.locationId()).ifPresent(event::setLocationId);
 
-        eventRepository.save(event);
+        eventEntityMapper.toDomain(event);
+        var updatedEvent = eventRepository.save(event);
 
-        return eventEntityMapper.toDomain(event);
+        kafkaChecker.getEventNotificationWithChangedFields(
+                event,
+                updatedEvent,
+                permissionService.getAuthenticatedUserId(),
+                eventRegistrationRepository.findAllUserLoginByEventRegisterIdQuery(eventId));
+        log.info("Event was modified: eventId={}", event.getId());
+
+        return eventEntityMapper.toDomain(updatedEvent);
     }
 
     public Event getEventById(Long eventId) {
@@ -103,10 +115,18 @@ public class EventService {
         }
 
         eventRepository.changeEventStatus(eventId, EventStatus.CANCELLED);
+        kafkaChecker.getEventNotificationWithChangedStatus(
+                event,
+                EventStatus.WAIT_START,
+                EventStatus.CANCELLED,
+                permissionService.getAuthenticatedUserId(),
+                eventRegistrationRepository.findAllUserLoginByEventRegisterIdQuery(eventId)
+        );
+        log.info("Event was cancelled: eventId={}", eventId);
     }
 
     public List<Event> searchByFilter(EventSearchRequestDto searchRequest) {
-        var foundEntities =  eventRepository.searchEvents(
+        var foundEntities = eventRepository.searchEvents(
                 searchRequest.name(),
                 searchRequest.placesMin(),
                 searchRequest.placesMax(),
