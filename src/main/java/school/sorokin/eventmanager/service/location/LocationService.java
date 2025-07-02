@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.sorokin.eventmanager.mapper.LocationEntityMapper;
-import school.sorokin.eventmanager.model.Location;
+import school.sorokin.eventmanager.model.location.Location;
 import school.sorokin.eventmanager.repository.LocationRepository;
 
 import java.util.List;

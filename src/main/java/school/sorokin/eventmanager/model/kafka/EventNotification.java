@@ -3,7 +3,7 @@ package school.sorokin.eventmanager.model.kafka;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import school.sorokin.eventmanager.model.EventStatus;
+import school.sorokin.eventmanager.model.event.EventStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,13 +16,13 @@ public class EventNotification {
     private Long ownerId;
     private List<String> subscribersLogins;
 
-    FieldChange<String> name;
-    FieldChange<Integer> maxPlaces;
-    FieldChange<LocalDateTime> date;
-    FieldChange<Integer> cost;
-    FieldChange<Integer> duration;
-    FieldChange<Long> locationId;
-    FieldChange<EventStatus> status;
+    private FieldChange<String> name;
+    private FieldChange<Integer> maxPlaces;
+    private FieldChange<LocalDateTime> date;
+    private FieldChange<Integer> cost;
+    private FieldChange<Integer> duration;
+    private FieldChange<Long> locationId;
+    private FieldChange<EventStatus> status;
 
     @Getter
     @AllArgsConstructor

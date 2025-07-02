@@ -1,7 +1,7 @@
 package school.sorokin.eventmanager.entity;
 
 import jakarta.persistence.*;
-import school.sorokin.eventmanager.model.UserRole;
+import school.sorokin.eventmanager.model.user.UserRole;
 
 @Entity
 @Table(name = "users")

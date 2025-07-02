@@ -2,7 +2,7 @@ package school.sorokin.eventmanager.mapper;
 
 import org.mapstruct.Mapper;
 import school.sorokin.eventmanager.entity.LocationEntity;
-import school.sorokin.eventmanager.model.Location;
+import school.sorokin.eventmanager.model.location.Location;
 
 @Mapper(componentModel = "spring")
 public interface LocationEntityMapper {

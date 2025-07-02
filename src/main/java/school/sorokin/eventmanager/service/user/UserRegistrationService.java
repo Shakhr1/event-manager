@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import school.sorokin.eventmanager.model.User;
-import school.sorokin.eventmanager.model.UserRole;
+import school.sorokin.eventmanager.model.user.User;
+import school.sorokin.eventmanager.model.user.UserRole;
 
 @Service
 @RequiredArgsConstructor

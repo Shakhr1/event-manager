@@ -1,4 +1,4 @@
-package school.sorokin.eventmanager.model;
+package school.sorokin.eventmanager.model.event;
 
 import java.time.LocalDateTime;
 import java.util.List;

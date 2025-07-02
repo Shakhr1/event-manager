@@ -4,8 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import school.sorokin.eventmanager.model.User;
-import school.sorokin.eventmanager.model.UserRole;
+import school.sorokin.eventmanager.model.user.User;
+import school.sorokin.eventmanager.model.user.UserRole;
 
 @Component
 @RequiredArgsConstructor

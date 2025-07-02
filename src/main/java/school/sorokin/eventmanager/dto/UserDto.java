@@ -1,6 +1,6 @@
 package school.sorokin.eventmanager.dto;
 
-import school.sorokin.eventmanager.model.UserRole;
+import school.sorokin.eventmanager.model.user.UserRole;
 
 public record UserDto(
         Long id,

@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import school.sorokin.eventmanager.dto.SignInRequest;
-import school.sorokin.eventmanager.model.User;
+import school.sorokin.eventmanager.model.user.User;
 import school.sorokin.eventmanager.security.jwt.JwtTokenManager;
 import school.sorokin.eventmanager.service.user.UserService;
 
