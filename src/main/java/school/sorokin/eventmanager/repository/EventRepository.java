@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import school.sorokin.eventmanager.entity.EventEntity;
-import school.sorokin.eventmanager.model.EventStatus;
+import school.sorokin.eventmanager.model.event.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -50,16 +50,14 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
     List<EventEntity> findAllByOwnerId(Long ownerId);
 
     @Query("""
-            SELECT e.id FROM EventEntity e
-            WHERE e.date < CURRENT_TIMESTAMP
-            AND e.status = :status
+            SELECT e FROM EventEntity e WHERE e.date <= CURRENT_DATE AND e.status = :status
             """)
-    List<Long> findStartedEventsWithStatus(@Param("status") EventStatus status);
+    List<EventEntity> findStartedEventsWithStatus(@Param("status") EventStatus status);
 
     @Query(value = """
-            SELECT e.id FROM events e
-            WHERE (e.date + (e.duration * INTERVAL '1 minute')) < NOW()
+            SELECT e FROM EventEntity e
+            WHERE (e.date + (e.duration * 1 minute)) < CURRENT_TIMESTAMP
             AND e.status = :status
-            """, nativeQuery = true)
-    List<Long> findEndedEventsWithStatus(@Param("status") EventStatus status);
+            """)
+    List<EventEntity> findEndedEventsWithStatus(@Param("status") EventStatus status);
 }

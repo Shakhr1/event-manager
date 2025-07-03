@@ -2,7 +2,7 @@ package school.sorokin.eventmanager.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import school.sorokin.eventmanager.model.EventStatus;
+import school.sorokin.eventmanager.model.event.EventStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -25,4 +25,11 @@ public interface EventRegistrationRepository extends JpaRepository<EventRegistra
             WHERE reg.userId = :userId
             """)
     List<EventEntity> findRegisteredEvents(@Param("userId") Long userId);
+
+    @Query(value = """
+           SELECT u.login FROM registrations r JOIN users u
+           ON r.user_id = u.id WHERE r.event_id = :eventId
+           """
+            , nativeQuery = true)
+    List<String> findAllUserLoginByEventRegisterIdQuery(Long eventId);
 }

@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import school.sorokin.eventmanager.entity.UserEntity;
 import school.sorokin.eventmanager.mapper.UserEntityMapper;
-import school.sorokin.eventmanager.model.User;
+import school.sorokin.eventmanager.model.user.User;
 import school.sorokin.eventmanager.repository.UserRepository;
 
 @Service

@@ -2,7 +2,7 @@ package school.sorokin.eventmanager.mapper;
 
 import org.mapstruct.Mapper;
 import school.sorokin.eventmanager.entity.UserEntity;
-import school.sorokin.eventmanager.model.User;
+import school.sorokin.eventmanager.model.user.User;
 
 @Mapper(componentModel = "spring")
 public interface UserEntityMapper {

@@ -9,9 +9,11 @@ import school.sorokin.eventmanager.dto.EventSearchRequestDto;
 import school.sorokin.eventmanager.dto.EventUpdateRequestDto;
 import school.sorokin.eventmanager.entity.EventEntity;
 import school.sorokin.eventmanager.mapper.EventEntityMapper;
-import school.sorokin.eventmanager.model.Event;
-import school.sorokin.eventmanager.model.EventStatus;
-import school.sorokin.eventmanager.model.UserRole;
+import school.sorokin.eventmanager.model.event.Event;
+import school.sorokin.eventmanager.model.event.EventStatus;
+import school.sorokin.eventmanager.model.user.UserRole;
+import school.sorokin.eventmanager.service.NotificationService;
+import school.sorokin.eventmanager.repository.EventRegistrationRepository;
 import school.sorokin.eventmanager.repository.EventRepository;
 import school.sorokin.eventmanager.service.auth.AuthenticationService;
 import school.sorokin.eventmanager.service.location.LocationService;
@@ -28,9 +30,11 @@ public class EventService {
     private final EventEntityMapper eventEntityMapper;
     private final LocationService locationService;
     private final AuthenticationService authenticationService;
+    private final NotificationService notificationService;
+    private final EventRegistrationRepository eventRegistrationRepository;
+    private final PermissionService permissionService;
 
     public Event createEvent(EventCreateRequestDto createRequestDto) {
-
         var location = locationService.getLocationById(createRequestDto.locationId());
         if (location.capacity() < createRequestDto.maxPlaces()) {
             throw new IllegalArgumentException("Capacity of location is: %s, but maxPlaces is: %s"
@@ -46,6 +50,7 @@ public class EventService {
 
     public Event updateEvent(Long eventId, EventUpdateRequestDto updateRequest) {
         canCurrentUserModifyEvent(eventId);
+        Event foundEvent = eventEntityMapper.toDomain(eventRepository.findById(eventId).orElseThrow());
         var event = eventRepository.findById(eventId).orElseThrow();
 
         if (!event.getStatus().equals(EventStatus.WAIT_START)) {
@@ -75,9 +80,16 @@ public class EventService {
         Optional.ofNullable(updateRequest.duration()).ifPresent(event::setDuration);
         Optional.ofNullable(updateRequest.locationId()).ifPresent(event::setLocationId);
 
-        eventRepository.save(event);
+        var updatedEvent = eventEntityMapper.toDomain(eventRepository.save(event));
 
-        return eventEntityMapper.toDomain(event);
+        notificationService.getEventNotificationWithChangedFields(
+                foundEvent,
+                updatedEvent,
+                permissionService.getAuthenticatedUserId(),
+                eventRegistrationRepository.findAllUserLoginByEventRegisterIdQuery(eventId));
+        log.info("Event was modified: eventId={}", event.getId());
+
+        return updatedEvent;
     }
 
     public Event getEventById(Long eventId) {
@@ -103,10 +115,18 @@ public class EventService {
         }
 
         eventRepository.changeEventStatus(eventId, EventStatus.CANCELLED);
+        notificationService.getEventNotificationWithChangedStatus(
+                event,
+                EventStatus.WAIT_START,
+                EventStatus.CANCELLED,
+                permissionService.getAuthenticatedUserId(),
+                eventRegistrationRepository.findAllUserLoginByEventRegisterIdQuery(eventId)
+        );
+        log.info("Event was cancelled: eventId={}", eventId);
     }
 
     public List<Event> searchByFilter(EventSearchRequestDto searchRequest) {
-        var foundEntities =  eventRepository.searchEvents(
+        var foundEntities = eventRepository.searchEvents(
                 searchRequest.name(),
                 searchRequest.placesMin(),
                 searchRequest.placesMax(),

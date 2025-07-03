@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.sorokin.eventmanager.entity.EventRegistrationEntity;
 import school.sorokin.eventmanager.mapper.EventEntityMapper;
-import school.sorokin.eventmanager.model.Event;
-import school.sorokin.eventmanager.model.EventStatus;
-import school.sorokin.eventmanager.model.User;
+import school.sorokin.eventmanager.model.event.Event;
+import school.sorokin.eventmanager.model.event.EventStatus;
+import school.sorokin.eventmanager.model.user.User;
 import school.sorokin.eventmanager.repository.EventRegistrationRepository;
 import school.sorokin.eventmanager.repository.EventRepository;
 

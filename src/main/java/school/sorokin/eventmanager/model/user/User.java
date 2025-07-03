@@ -1,4 +1,4 @@
-package school.sorokin.eventmanager.model;
+package school.sorokin.eventmanager.model.user;
 
 public record User(
         Long id,

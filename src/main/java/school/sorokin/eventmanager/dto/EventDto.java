@@ -1,7 +1,7 @@
 package school.sorokin.eventmanager.dto;
 
 import jakarta.validation.constraints.*;
-import school.sorokin.eventmanager.model.EventStatus;
+import school.sorokin.eventmanager.model.event.EventStatus;
 
 import java.time.LocalDateTime;
 

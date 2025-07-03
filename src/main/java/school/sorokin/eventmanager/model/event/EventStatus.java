@@ -1,4 +1,4 @@
-package school.sorokin.eventmanager.model;
+package school.sorokin.eventmanager.model.event;
 
 public enum EventStatus {
     WAIT_START,

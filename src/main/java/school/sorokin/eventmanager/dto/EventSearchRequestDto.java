@@ -1,6 +1,6 @@
 package school.sorokin.eventmanager.dto;
 
-import school.sorokin.eventmanager.model.EventStatus;
+import school.sorokin.eventmanager.model.event.EventStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
